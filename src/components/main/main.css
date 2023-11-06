@@ -1,0 +1,8 @@
+#table-head {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100;
+}
+#table-head-column {
+  width: 200px !important;
+}
