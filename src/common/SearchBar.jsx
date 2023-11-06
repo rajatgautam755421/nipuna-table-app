@@ -19,7 +19,7 @@ function SearchBar({
       size={size || "sm"}
       mt={2}
       my={verticalSpacing || 4}
-      width={"auto"}
+      width={"100%"}
     >
       <InputLeftElement pointerEvents="none">
         <Icon as={BsSearch} color={"gray.500"} />
@@ -27,7 +27,7 @@ function SearchBar({
       <Input
         type="text"
         placeholder={placeHolder}
-        color={"black"}
+        color={"gray.600"}
         fontSize={fontSize}
       />
       {showOptions && (

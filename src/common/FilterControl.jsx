@@ -8,13 +8,7 @@ import {
 import React from "react";
 import { IoIosArrowDown } from "react-icons/io";
 
-const FilterControl = ({
-  size,
-  placeHolder,
-  verticalSpacing,
-
-  icon,
-}) => {
+const FilterControl = ({ size, placeHolder, verticalSpacing, icon }) => {
   return (
     <InputGroup
       size={size || "sm"}
@@ -22,6 +16,7 @@ const FilterControl = ({
       mt={2}
       my={verticalSpacing || 4}
       mx={2}
+      fontSize={12}
     >
       <InputLeftElement pointerEvents="none">
         <Icon as={icon} color={"gray.500"} />
@@ -29,7 +24,7 @@ const FilterControl = ({
       <Input
         type="text"
         placeholder={placeHolder}
-        color={"gray.500"}
+        color={"gray.600"}
         fontSize={12}
       />
 

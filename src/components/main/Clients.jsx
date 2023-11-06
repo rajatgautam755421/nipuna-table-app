@@ -25,6 +25,8 @@ const Clients = ({ tableRows, onNewClientMetaInitialized, isError }) => {
       justifyContent={"space-between"}
       px={5}
       id="new-client"
+      mt={3}
+      mb={3}
     >
       {isError && (
         <Alert status="error">
@@ -37,7 +39,6 @@ const Clients = ({ tableRows, onNewClientMetaInitialized, isError }) => {
         bgColor={"brand.primary"}
         color={"white"}
         size={"sm"}
-        mt={2}
         _hover={{ bgColor: "brand.primary" }}
         rightIcon={<IoIosArrowDown />}
         onClick={onNewClientMetaInitialized}
@@ -46,9 +47,19 @@ const Clients = ({ tableRows, onNewClientMetaInitialized, isError }) => {
       </Button>
       <Box>
         <Flex>
-          {clientStatus.map(({ label, value }) => {
+          {clientStatus.map(({ label, value }, index) => {
             return (
-              <Text color={"gray.600"} mx={2} fontSize={13} cursor={"pointer"}>
+              <Text
+                key={label}
+                px={2}
+                py={1}
+                color={"gray.700"}
+                mx={2}
+                fontSize={13}
+                cursor={"pointer"}
+                borderBottomWidth={index === 1 ? 1.5 : 0}
+                borderColor={index === 1 ? "brand.success" : "transparent"}
+              >
                 {`${label}(${value})`}
               </Text>
             );

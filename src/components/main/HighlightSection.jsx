@@ -14,13 +14,13 @@ const HighlightSection = ({ activeTab }) => {
     >
       <Flex flex={1} alignItems={"center"}>
         <Icon as={activeTab?.icon} boxSize={5} color={"gray.500"} />
-        <Text fontSize="md" color={"black"} ml={3} fontWeight={"medium"}>
+        <Text fontSize={16} color={"gray.800"} ml={3} fontWeight={"medium"}>
           {activeTab.title}
         </Text>
       </Flex>
 
       {/* Location Dropdown */}
-      <Select width={"20%"} color="gray.500" size={"sm"}>
+      <Select width={"20%"} color="gray.600" size={"sm"}>
         <option value="option1" selected>
           Branch(Kathmandu)
         </option>

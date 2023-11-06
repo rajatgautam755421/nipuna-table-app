@@ -19,7 +19,7 @@ const Tab = ({ title, icon, activeTab, onActiveTabChange }) => {
       <Box flex={1}>
         <Flex justifyContent={"start"} alignItems={"center"}>
           <Icon as={icon || PiDotsNineBold} boxSize={4} color={"gray.500"} />
-          <Text fontSize="13" color={"gray.700"} ml={3}>
+          <Text fontSize={13} color={"gray.700"} ml={3} fontWeight={"medium"}>
             {title}
           </Text>
         </Flex>

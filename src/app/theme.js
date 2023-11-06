@@ -33,6 +33,8 @@ export const theme = extendBaseTheme({
       borderColor: "#EDEDF3",
       activeColor: "#EBEBF8",
       primary: "#7474C8",
+      success: "#49C86E",
+      info: "#4786E7",
     },
   },
 });

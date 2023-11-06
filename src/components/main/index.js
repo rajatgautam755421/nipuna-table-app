@@ -1,23 +1,12 @@
-import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
-  Box,
-  Divider,
-  Grid,
-  GridItem,
-  Input,
-} from "@chakra-ui/react";
-import React, { useState } from "react";
+import { Box, Divider, Grid, GridItem, Input } from "@chakra-ui/react";
+import React, { useMemo, useState } from "react";
 import CentredModal from "../../common/CentredModal";
 import { DATA_TABLE_COULMNS } from "../../helpers/constants";
 import withHeaderHeight from "../../hoc/HeaderHeight";
 import ActionsSection from "./ActionsSection";
 import Clients from "./Clients";
-import DataTable from "./DataTable";
 import HighlightSection from "./HighlightSection";
-
+import DataTable from "./data-table";
 import "./main.css";
 
 const MainIndex = ({ activeTab, headerHeight }) => {
@@ -25,11 +14,20 @@ const MainIndex = ({ activeTab, headerHeight }) => {
   const [newClient, setNewClient] = useState(null);
   const [isError, setIsError] = useState(null);
 
+  const staticTableRows = useMemo(() => {
+    return [];
+  }, []);
+
+  const onErrorChange = (value) => {
+    setIsError(value);
+  };
+
   const onTableRowsChange = (updatedData) => {
     setTableRows(updatedData);
   };
 
   const onNewClientMetaChange = (key, value) => {
+    onErrorChange(null);
     newClient[key] = value;
     setNewClient({ ...newClient });
   };
@@ -39,12 +37,14 @@ const MainIndex = ({ activeTab, headerHeight }) => {
   };
 
   const onNewClientMetaDestroyed = () => {
+    onErrorChange(null);
     setNewClient(null);
   };
 
   const onNewClientAdd = () => {
-    newClient["clientId"] = Date.now();
-    newClient["active"] = false;
+    newClient["clientId"] = `client-${Date.now()}`;
+    newClient["active"] = "No";
+    newClient["tags"] = ["Tag1"];
 
     const emptyField = DATA_TABLE_COULMNS.find(({ key }) =>
       typeof newClient[key] !== "boolean" ? !newClient[key] : null
@@ -53,7 +53,7 @@ const MainIndex = ({ activeTab, headerHeight }) => {
     if (emptyField) {
       return setIsError(`${emptyField?.label} is empty`);
     }
-
+    staticTableRows.unshift(newClient);
     setTableRows([newClient, ...tableRows]);
 
     setNewClient(null);
@@ -73,7 +73,10 @@ const MainIndex = ({ activeTab, headerHeight }) => {
         body={
           <Grid templateColumns="repeat(2, 1fr)" gap={4}>
             {DATA_TABLE_COULMNS.filter(
-              (column) => column.key !== "clientId" && column.key !== "active"
+              (column) =>
+                column.key !== "clientId" &&
+                column.key !== "active" &&
+                column.key !== "tags"
             ).map((column) => (
               <GridItem key={column.key}>
                 <Input
@@ -97,7 +100,11 @@ const MainIndex = ({ activeTab, headerHeight }) => {
         tableRows={tableRows}
         onNewClientMetaInitialized={onNewClientMetaInitialized}
       />
-      <DataTable tableRows={tableRows} onTableRowsChange={onTableRowsChange} />
+      <DataTable
+        tableRows={tableRows}
+        onTableRowsChange={onTableRowsChange}
+        staticTableRows={staticTableRows}
+      />
     </Box>
   );
 };

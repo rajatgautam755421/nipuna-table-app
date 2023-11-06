@@ -26,14 +26,14 @@ const CentredModal = ({
     <div>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        {error && (
-          <Alert status="error">
-            <AlertIcon />
-
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
         <ModalContent>
+          {error && (
+            <Alert status="error">
+              <AlertIcon />
+
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
           <ModalHeader>{title}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>{body}</ModalBody>

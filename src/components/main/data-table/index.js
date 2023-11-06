@@ -4,7 +4,6 @@ import {
   Checkbox,
   Flex,
   Icon,
-  Input,
   Table,
   TableContainer,
   Tbody,
@@ -16,20 +15,20 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
-import { BsPlusCircle } from "react-icons/bs";
 import { PiCaretUpDownThin } from "react-icons/pi";
-import BottomFixedBox from "../../common/BottomFixedBox";
-import OptionsMenu from "../../common/OptionsMenu";
-import { DATA_TABLE_COULMNS } from "../../helpers/constants";
+import OptionsMenu from "../../../common/OptionsMenu";
+import BottomFixedBox from "../../../common/TopFixedBox";
+import { DATA_TABLE_COULMNS } from "../../../helpers/constants";
 import {
   calculateNonTabularHeight,
   generateRandomTableData,
   representTableData,
-} from "../../helpers/general";
+} from "../../../helpers/general";
+import CellRenderer from "./CellRenderer";
 
 const randomTableData = generateRandomTableData(15);
 
-const DataTable = ({ tableRows, onTableRowsChange }) => {
+const DataTable = ({ tableRows, onTableRowsChange, staticTableRows }) => {
   const [nonTabularDimension, setNonTabularDimension] = useState({});
   const [checkedItems, setCheckedItems] = useState([]);
   const [dataColumns, setDataColumns] = useState(DATA_TABLE_COULMNS);
@@ -39,10 +38,6 @@ const DataTable = ({ tableRows, onTableRowsChange }) => {
   }, []);
 
   const updatedRows = useMemo(() => {
-    return [];
-  }, []);
-
-  const staticTableRows = useMemo(() => {
     return [];
   }, []);
 
@@ -123,16 +118,21 @@ const DataTable = ({ tableRows, onTableRowsChange }) => {
       color={"black"}
       style={{
         width: `calc(100vw - ${nonTabularDimension?.width}px ) `,
-        height: `calc(100vh - ${nonTabularDimension?.height}px)`,
+        height: `calc(100vh - ${nonTabularDimension?.height}px - 20px)`,
       }}
       overflowX={"auto"}
       overflowY={"auto"}
     >
-      {/* Undo And Confirl Modal */}
+      {/* Undo And Confirm Modal */}
       {updatedRows.length > 0 && (
         <BottomFixedBox
-          title={`There are ${updatedRows.length} row(s) updated. Do you want to save it or not`}
-          onSave={() => console.log("Saved")}
+          title={`There are ${updatedRows.length} row(s) updated. Do you want to save it or not?`}
+          onSave={() => {
+            updatedRows.splice(0, updatedRows.length);
+            staticTableRows.splice(0, staticTableRows.length);
+            staticTableRows.push(...tableRows);
+            onTableRowsChange([...tableRows]); // Currenty tableRow state is updated to show Ui changes by in real world application it is not valid
+          }}
           onCancel={onCancelClick}
         />
       )}
@@ -141,8 +141,8 @@ const DataTable = ({ tableRows, onTableRowsChange }) => {
         size={"md"}
         borderWidth="1px"
         borderColor="gray.200"
-        mt={3}
       >
+        {/* Table Columns */}
         <Thead>
           <Tr id="table-head" backgroundColor={"gray.50"}>
             <Th width={"20px"}>
@@ -151,26 +151,30 @@ const DataTable = ({ tableRows, onTableRowsChange }) => {
                 isChecked={tableRows?.length === checkedItems.length}
               />
             </Th>
-            {dataColumns.map(({ label, key, disabled }) => (
+            {dataColumns.map((dataColumn) => (
               <Th
+                key={dataColumn?.key}
                 id="table-head-column"
                 textAlign={"left"}
                 p={2}
                 borderWidth="1px"
                 borderColor="gray.200"
               >
+                {/* Single Column Content Like Column Name, and icons */}
+
                 <Flex>
                   <Box flex={1}>
-                    {label}{" "}
+                    {dataColumn?.label}{" "}
                     <Icon
                       as={PiCaretUpDownThin}
                       boxSize={3}
                       color={"gray.800"}
                     />
                   </Box>
+
                   <OptionsMenu
                     options={["Hide Column"]}
-                    id={{ key, label, disabled }}
+                    id={{ ...dataColumn, type: dataColumn?.type || "text" }}
                     onOptionClick={onColumnsHide}
                   />
                 </Flex>
@@ -203,52 +207,50 @@ const DataTable = ({ tableRows, onTableRowsChange }) => {
           </Tr>
         </Thead>
         <Tbody>
-          {tableRows.map((row, rowIndex) => {
+          {tableRows.map((row) => {
             return (
-              <Tr>
+              <Tr key={row?.clientId}>
                 <Td>
                   <Checkbox
                     onChange={() => handleSingleItemCheck(row.clientId)}
                     isChecked={checkedItems.includes(row.clientId)}
                   />
                 </Td>
-                {dataColumns.map(({ key, label, disabled }) => {
+                {dataColumns.map(({ key, disabled, type, options, label }) => {
                   return (
-                    <>
-                      <Td
-                        textAlign={"left"}
-                        p={2}
-                        borderWidth="1px"
-                        borderColor="gray.200"
+                    <Td
+                      key={key}
+                      textAlign={"left"}
+                      p={2}
+                      borderWidth="1px"
+                      borderColor="gray.200"
+                    >
+                      <Flex
+                        alignItems={"center"}
+                        justifyContent={"space-between"}
+                        flexDirection={type === "array" && "column"}
                       >
-                        <Flex alignItems={"center"}>
-                          <Input
-                            disabled={disabled}
-                            className="table-input"
-                            width={150}
-                            padding={0}
-                            height={"30px"}
-                            textAlign={"left"}
-                            fontSize={13}
-                            value={representTableData(row[key])}
-                            border="none"
-                            borderColor="transparent"
-                            placeholder="-"
-                            id="table-data-input"
-                            onChange={(e) =>
-                              handleCellValueChange({
-                                ...row,
-                                [key]: e.target.value,
-                              })
-                            }
-                          />
-                          {key === "name" &&
-                            checkedItems.includes(row?.clientId) && (
-                              <Icon as={BsPlusCircle} cursor={"pointer"} />
-                            )}
-                        </Flex>
-                      </Td>
-                    </>
+                        <CellRenderer
+                          checkedItems={checkedItems}
+                          row={row}
+                          cellKey={key}
+                          disabled={disabled}
+                          options={options}
+                          type={type || "text"}
+                          label={label}
+                          value={representTableData(row[key])}
+                          onChange={(e) =>
+                            handleCellValueChange({
+                              ...row,
+                              [key]:
+                                type === "array"
+                                  ? [...row[key], e.target.value]
+                                  : e.target.value,
+                            })
+                          }
+                        />
+                      </Flex>
+                    </Td>
                   );
                 })}
               </Tr>

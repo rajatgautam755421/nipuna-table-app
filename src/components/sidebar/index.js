@@ -19,7 +19,7 @@ const SidebarIndex = ({ headerHeight, activeTab, onActiveTabChange }) => {
       id="sidebar"
     >
       <Flex justifyContent={"start"} alignItems={"center"}>
-        <Text color={"black"} fontWeight={"medium"}>
+        <Text color={"gray.700"} fontWeight={"medium"} fontSize={16}>
           CRM
         </Text>
         <Icon
@@ -35,6 +35,7 @@ const SidebarIndex = ({ headerHeight, activeTab, onActiveTabChange }) => {
 
       {TABS_INFO.map((tabInfo) => (
         <Tab
+          key={tabInfo.title}
           title={tabInfo.title}
           icon={tabInfo?.icon}
           activeTab={activeTab}

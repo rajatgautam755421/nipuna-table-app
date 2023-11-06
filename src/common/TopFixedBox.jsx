@@ -1,6 +1,6 @@
 import { Box, Button } from "@chakra-ui/react";
 
-function BottomFixedBox({
+function TopFixedBox({
   title,
   button1Text = "Undo",
   button2Text = "Save",
@@ -52,4 +52,4 @@ function BottomFixedBox({
   );
 }
 
-export default BottomFixedBox;
+export default TopFixedBox;

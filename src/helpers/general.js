@@ -8,7 +8,7 @@ function generateRandomItem() {
     } else if (column.key === "addedFrom") {
       item[column.key] = `Source-${Math.floor(Math.random() * 5)}`;
     } else if (column.key === "tags") {
-      item[column.key] = [`Tag${Math.floor(Math.random() * 10)}`];
+      item[column.key] = [`Tag${Math.floor(Math.random() * 10)}`, "Tag1"];
     } else if (column.key === "internalId") {
       item[column.key] = `ID-${Math.floor(Math.random() * 100000)}`;
     } else if (column.key === "clientId") {
@@ -22,7 +22,7 @@ function generateRandomItem() {
     } else if (column.key === "assignee") {
       item[column.key] = `User-${Math.floor(Math.random() * 10)}`;
     } else if (column.key === "active") {
-      item[column.key] = false;
+      item[column.key] = "No";
     } else if (column.key === "email") {
       item[column.key] = `User-${Math.floor(Math.random() * 10)}@gmail.com`;
     } else if (column.key === "address") {

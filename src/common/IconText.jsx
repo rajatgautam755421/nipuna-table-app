@@ -5,7 +5,7 @@ const IconText = ({ icon, text }) => {
   return (
     <Flex alignItems={"center"} mx={2} cursor={"pointer"}>
       <Icon as={icon} color={"gray.500"} boxSize={4} />
-      <Text color={"gray.500"} fontSize={12} ml={1}>
+      <Text color={"gray.600"} fontSize={12} ml={1}>
         {text}
       </Text>
     </Flex>

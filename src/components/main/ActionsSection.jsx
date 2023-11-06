@@ -1,5 +1,6 @@
 import { Flex, Icon, Text } from "@chakra-ui/react";
 import React from "react";
+import { RxDividerVertical } from "react-icons/rx";
 import FilterControl from "../../common/FilterControl";
 import IconText from "../../common/IconText";
 import SearchBar from "../../common/SearchBar";
@@ -7,7 +8,6 @@ import {
   FILTER_OPTIONS,
   SECONDARY_FILTER_OPTIONS,
 } from "../../helpers/constants";
-import { RxDividerVertical } from "react-icons/rx";
 
 const ActionsSection = () => {
   return (
@@ -28,7 +28,11 @@ const ActionsSection = () => {
         {/* Filter By Assigned */}
         {FILTER_OPTIONS.map((option) => {
           return (
-            <FilterControl placeHolder={option.label} icon={option.icon} />
+            <FilterControl
+              placeHolder={option.label}
+              icon={option.icon}
+              key={option.key}
+            />
           );
         })}
       </Flex>
@@ -43,7 +47,13 @@ const ActionsSection = () => {
             </>
           );
         })}
-        <Text color={"blue"} fontSize={13} cursor="pointer" ml={4}>
+        <Text
+          color={"brand.info"}
+          fontSize={13}
+          cursor="pointer"
+          ml={4}
+          fontWeight={"medium"}
+        >
           Clear
         </Text>
       </Flex>
